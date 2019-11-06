@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script src="./jquery.1.0.2.js"></script>
+  <script>
+    var wait = function(){
+      var df = $.Deferred();
+      setTimeout(function(){
+        console.log("开车啦");
+        df.resolve();
+      }, 5000);
+      return df;
+    };
+    $.when(wait())
+    .done(function(){
+      console.log(111)
+    })
+    .fail(function(){
+      console.log(2222)
+    });
+  </script>
+</body>
+</html>
