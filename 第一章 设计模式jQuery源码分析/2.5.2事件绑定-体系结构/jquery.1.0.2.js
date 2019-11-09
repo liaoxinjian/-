@@ -1,6 +1,7 @@
 (function(root){
   var rejectExp = /^<(\w+)\s*\/?>(?:<\/\1>|)$/;
   var optionsCache = [];
+  var ver_sion = "1.0.2";
   var jQuery = function(selector, context){
     return jQuery.fn.init(selector, context)
   }
@@ -8,18 +9,37 @@
     length: 0,
     init: function(selector, context){
       context = context || document;
-      if (!selector) {
-        return this;
-      }
-      if (typeof selector === "string") {
-        if (selector.charAt(0) === "<" && selector.charAt(selector.length-1) === ">" && selector.length >= 3) {
-          match = [selector];
-        }
-        // 如果有的话 说明是创建dom对象
-        if (match) {
-          jQuery.merge(this, jQuery.parseHtml(selector, context))
-        }
-      }
+			var match, elem, index = 0;
+			//$()  $(undefined)  $(null) $(false)  
+			if (!selector) {
+				return this;
+			}
+
+			if (typeof selector === "string") {
+				if (selector.charAt(0) === "<" && selector.charAt(selector.length - 1) === ">" && selector.length >= 3) {
+					match = [selector]
+				}
+				//创建DOM
+				if (match) {
+					//this  
+					jQuery.merge(this, jQuery.parseHTML(selector, context));
+					//查询DOM节点
+				} else {
+					elem = document.querySelectorAll(selector);
+					var elems = Array.prototype.slice.call(elem);
+					this.length = elems.length;
+					for (; index < elems.length; index++) {
+						this[index] = elems[index];
+					}
+					this.context = context;
+					this.selector = selector;
+				}
+			} else if (selector.nodeType) {
+				this.context = this[0] = selector;
+				this.length = 1;
+			}
+      return this;
+
     }
   }
   jQuery.fn.extend = jQuery.extend = function(){
@@ -61,6 +81,8 @@
     }
   }
   jQuery.extend({
+    expando: "jQuery" + (ver_sion + Math.random()).replace(/\D/g, ""),
+    guid: 1,
     isArray: function(obj){
       return toString.call(obj) === "[object Array]";
     },
@@ -214,13 +236,13 @@
       // 因此才能像demo中通过$.when(wait()).done(function(){})
       return deferredObj.promise();
     },
-    each: function(target, callback, args){ 
-      // 这里的target值的是目标源 也就是要将事件绑定上去的对象
+    each: function(object, callback, args){ 
+      // 这里的object值的是目标源 也就是要将事件绑定上去的对象
       // callback指的就是 on方法里面return 出去的 function(){jQuery.event.add(this,types,fn)}
       // args是用来自定义事件的 这一节先不讨论这个
-      // target可能是一个数组 也可能是一个对象
+      // object可能是一个数组 也可能是一个对象
       // 照道理来说对象是没有length属性的 但是我们的jQuery实例对象身上我们给他添加了length属性 所以他是有值的 不是undefined
-      var length = target.length;
+      var length = object.length;
       var name, i = 0;
       // 自定义callback参数
       if (args) {
@@ -279,6 +301,7 @@
         }
       } 
       return this.each(function(){
+        console.log(this);
         jQuery.event.add(this, types, fn);
       })
     },
@@ -286,21 +309,124 @@
       jQuery.each(this, callbacks, args);
     }
   })
+
+  function Data(){
+    // 这个是jQuery每次运行加载期间时唯一的随机数
+    // 也是存储在dom对象身上拿取存储事件仓库的凭证的钥匙
+    this.expando = jQuery.expando + Math.random();
+    this.cache = {};
+  }
+  Data.uid = 1;
+  Data.prototype = {
+    key: function(elem){
+      // 定义一个空对象 这个空对象是接下来用于将jQUery的唯一随机数和凭证存储在dom对象身上
+      var descriptor = {},
+      // unlock就是拿到数据仓库的凭证
+          unlock = elem[this.expando];
+      // 如果没有unlock的话 那么就给unlock赋值 
+      if (!unlock) {
+        unlock = Data.uid++;
+        // 这一步是为了配合Object.defineProperties使用的
+        descriptor[this.expando] = {
+          value: unlock
+        }        
+        Object.defineProperties(elem, descriptor);      // 得到的结果是  elem[jQuery23123123.23123]: 1  这种值 1是拿取事件函数仓库的凭证 前面那个Jquery的随机数就是查看这个dom对象身上有没有这个凭证的钥匙
+      }
+      // 确保缓存对象记录信息
+      // 如果缓存对象上没有这个凭证相关的值的话
+      // 那么就给他创建出来 并且赋值为{} 这个空对象里面保存着数据信息
+      if (!this.cache[unlock]) {
+        this.cache[unlock] = {};   
+      }
+      // 最后返回这个unlock
+      return unlock;
+    },
+    get: function(elem, key){
+      // 获取这个缓存里面所有有关这个dom元素身上的数据
+      var cache = this.cache[this.key(elem)];
+      console.log(cache)
+      // 有key的话 直接找到缓存中的数据
+      return key === undefined? cache: cache[key];
+    }
+  }
+  var data_priv = new Data();
   jQuery.event = {
     // add方法的作用
     // 1.是利用data_priv数据缓存，分离事件与数据
     // 2.元素与缓存中建立guid的映射关系用于查找
-    add: function(){
+    add: function(elem, type, handler){
+      var eventHandle, events, handlers;
+      // 获取事件缓存对象
+      var elemData = data_priv.get(elem)
+      // 所有的事件查找删除都是根据这个guid进行查找和删除的
+      if (!handler.guid) {
+        handler.guid = jQuery.guid++;
+      }
+      // 给事件缓存添加处理具柄
+      // elemtData = {events: , handler: }
+      // 同一个元素 不同事件 不能重复绑定
+      if (!(events = elemData.events)) {
+        events = elemData.events = {};
+      }
+      if (!(eventHandle = elemData.handle)) {
+        eventHandle = elemData.handle = function(e){
 
+          return jQuery.event.dispatch.apply(eventHandle.elem, arguments);
+        }
+      }
+      // 将绑定的dom元素绑定到eventHandle这个
+      // 这个eventHandle指的就是function(e){return jQuery.event.dispatch.apply(this, arguments);} 这一个函数 
+      eventHandle.elem = elem;
+      // 这个events的值是这样的 {click: [{type:"click", guid: 1, handler: f}, delegateCount:0]}
+      // 所以也就是把后面[{type:"click", guid: 1, handler: f}, delegateCount:0]这一段赋值给了handlers
+      // 这里的type指的是用户想要注册的事件名
+      // 这个events是刚才上面通过elemData.events创建出来的 也就是从缓存对象中拿取的events
+      if (!(handlers = events[type])) {
+        // 如果events身上没有这个事件的话 那么就给他一个空数组
+        handlers = events[type] = [];
+        // 有多少事件代理默认为0个
+        handlers.deledateCount = 0;
+      }
+      handlers.push({
+        // 这里的type指的是用户想要注册的事件名
+        type: type,
+        // 这个handler是传过来的参数handler 也就是用户想要执行的事件处理函数
+        handler: handler,
+        guid: handler.guid
+      })
+      if (elem.addEventListener) {
+        // 这行上面eventHandle的函数 也就是下面的这一函数
+        /**
+         * function(e){
+         *  return jQuery.event.dispatch.apply(eventHandle.elem, arguments)
+         * }
+         */
+        // 这行上面这一段函数 他是要去执行dispatch dispatch里面的this指向的全都是这个注册的dom对象
+        elem.addEventListener(type, eventHandle, false);
+      }
     },
     // dispatch的作用 
     // 修建事件对象event(其实就是解决兼容性的问题) 从缓存中的events对象获取得到对应队列
-    dispatch: function(){
+    dispatch: function(event){
+      // IE兼容性处理如 event.target 或者event.srcElement
+      // event = jQuery.event.fix(event)
 
+      // 提取当前元素在cache中的events属性 click
+      // 这个event.type也就是用户要做的事件名
+      // 这个handlers的值是这样的 [{type: "click", guid: 1, handler:f }, delegateCount: 0]
+      // 这个是从刚才缓存对象中拿到的
+      var handlers = (data_priv.get(this, "events") || {})[event.type] || [];
+      // 这个this指的就是dom元素
+      event.delegateTarget = this;
+      // 这个this指的是dom元素
+      // event也就是事件处理对象
+      // handlers指的就是刚才的这一段[{type: "click", guid: 1, handler:f }, delegateCount: 0]
+      jQuery.event.handlers.call(this, event, handlers)
     },
     // 执行事件处理函数
-    handlers: function(){
-
+    handlers: function(event, handlers){
+      // 执行在缓存对象中的事件函数 将this指向这个dom对象
+      handlers[0].handler.call(this, event);
     },
     // 兼容事件处理
     fix: function(){
