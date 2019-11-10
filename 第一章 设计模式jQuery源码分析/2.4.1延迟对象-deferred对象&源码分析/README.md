@@ -69,6 +69,8 @@
         deferred[tuple[0]] = function(){
           // 当this跟deferred相等的时候 将promise对象传回
           // 这里为什么传回promise方法呢
+          // 因为这里要将状态凝固起来 因为deferred方法只允许状态修改一次以后就不能再次修改了，如果你传回一个deferred对象的话 那这个对象又可以再次修改这个状态
+          // 所以这里我们要传回promise
           deferred[tuple[0] + "With"](this === deferred? promise: this, arguments);
         }
         deferred[tuple[0] + "With"] = list.fireWith;
