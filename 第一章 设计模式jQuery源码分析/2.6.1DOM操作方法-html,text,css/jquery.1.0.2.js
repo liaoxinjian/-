@@ -292,6 +292,13 @@
       // cache是用来缓存callback 用来增强功能的
       // chain是用来 是否开启链式调用的 如果开启链式调用的话 说明返回的值是一个jQuery的实例对象
       var cache, chain;
+      // 当传过来的key值为对象时 要在进行一次递归操作 将它变为字符串传进去
+      if (jQuery.isObject(key)) {
+        chain = true;
+        for (var name in key) {
+          jQuery.access(elems, callback, name, key[name]);
+        }
+      }
       // 当value不等于undefined
       // 说明 用户是想给这个元素进行dom操作 并且还可以接着进行链式调用其他的方法
       if (value !== undefined) {
@@ -401,13 +408,16 @@
     },
     css: function(key, value){
       return jQuery.access(this, function(key, value){
+        var CSSStyleDeclaration, len;
         // 这个用来存储key为数组时候相对应的css属性的值
         var map = {};
         // 如果key是一个数组的话 那么就把相对应的值返回出去
         if (jQuery.isArray(key)) {
+          CSSStyleDeclaration = window.getComputedStyle(this);
+          len = key.length;
           // 通过for循环将css所传入的值是一个数组的时候返回出来的css值保存在map对象里面 然后并且把这个map返回出去
-          for (var i = 0; i < key.length; i++) {
-            map[key[i]] = key[i]; 
+          for (var i = 0; i < len; i++) {
+            map[key[i]] = CSSStyleDeclaration.getPropertyValue(key[i]); 
           }
           return map;
         }
