@@ -461,7 +461,7 @@
               }
             }
             // 当while循环结束以后给dom元素添加上这个类名
-            elem.className = clazz;
+            elem.className = clazz.trim();
           }
         }
       }

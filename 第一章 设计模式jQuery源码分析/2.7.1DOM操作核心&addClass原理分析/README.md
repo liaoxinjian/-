@@ -39,7 +39,7 @@
               }
             }
             // 最后当while循环结束的时候 把这个类名赋值上去
-            elem.className = clazz;
+            elem.className = clazz.trim();
           }
         }
       }
