@@ -9,6 +9,7 @@
 6. [2.5.2事件绑定-体系结构-绑定设计](https://github.com/liaoxinjian/-/tree/master/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8FjQuery%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2.5.2%E4%BA%8B%E4%BB%B6%E7%BB%91%E5%AE%9A-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84)
 7. [2.5.3事件绑定-自定义事件or模拟事件](https://github.com/liaoxinjian/-/tree/master/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8FjQuery%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2.5.3-%E4%BA%8B%E4%BB%B6%E7%BB%91%E5%AE%9A-%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%BE%E8%AE%A1%20or%20%E6%A8%A1%E6%8B%9F%E4%BA%8B%E4%BB%B6)
 8. [2.6.1DOM操作方法-html,text,css](https://github.com/liaoxinjian/-/tree/master/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8FjQuery%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2.6.1DOM%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95-html%2Ctext%2Ccss)
+9. [2.7.1DOM操作核心&addClass原理分析](https://github.com/liaoxinjian/-/tree/master/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8FjQuery%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2.7.1DOM%E6%93%8D%E4%BD%9C%E6%A0%B8%E5%BF%83%26addClass%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90)
 
 
 *** 个人这一章的学习方法：先看第一遍，蒙蔽状态，然后跟着敲，能敲多少是多少，在看第二遍，再跟着敲，只能敲到几乎每一行代码都包含的意思才算结束 ***
