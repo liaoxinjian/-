@@ -17,10 +17,24 @@
   <div class="box"></div>
   <script src="./jquery.1.0.2.js"></script>
   <script>
-    console.log($('.box'))
-    $('.box').on('click', function(){
-      console.log(1111)
-    });
+    // console.log($('.box'))
+    // $('.box').on('click', function(){
+    //   console.log(1111)
+    // });
+    // $('.box').on('mouseover', function(){
+    //   console.log(2222)
+    // })
+    $(".box").on({
+"click": function() {
+                console.log(1)
+            },
+"mouseover": function() {
+                  console.log(2)
+            },
+"mouseout": function() {
+                  console.log(3)
+            },
+        });
   </script>
 </body>
 </html>

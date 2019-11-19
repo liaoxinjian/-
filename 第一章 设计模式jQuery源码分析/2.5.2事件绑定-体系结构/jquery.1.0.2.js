@@ -297,13 +297,17 @@
       // 因此要把types中的属性名(方法名)和所对应的方法注册上去
       if (toString.call(types) === "[object Object]") {
         for (type in types) {
-          this.on(type, fn);
+          this.on(type, types[type]);
         }
       } 
-      return this.each(function(){
-        console.log(this);
-        jQuery.event.add(this, types, fn);
-      })
+      // 这个判断是为了在等下递归到最后的时候 如果types和fn都为undefined的时候就不会执行 以防出错
+      if (types != undefined && fn != undefined) {
+        return this.each(function(){
+          console.log(this);
+          jQuery.event.add(this, types, fn);
+        })
+      }
+     
     },
     each: function(callbacks, args){
       jQuery.each(this, callbacks, args);
