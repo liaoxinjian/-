@@ -312,9 +312,11 @@
           this.on(type, fn);
         }
       } 
-      return this.each(function(){
-        jQuery.event.add(this, types, fn);
-      })
+      if (types != undefined && fn != undefined) {
+        return this.each(function(){
+          jQuery.event.add(this, types, fn);
+        })
+      }
     },
     each: function(callbacks, args){
       jQuery.each(this, callbacks, args);
