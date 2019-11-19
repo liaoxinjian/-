@@ -82,7 +82,24 @@ var max = new Person();
 ![js的原型链图片](./prototype.png "原型链")
 
 ### 变异方法 可以改变数组的值 push pop unshift splice sort...
-当你执行这些方法的时候，进行拦截，进行一些数据收集，在进行这些操作。怎么进行拦截呢？通过代理原型的方式进行拦截。比如说：
+当你执行这些方法的时候，进行拦截，进行一些数据收集，在进行这些操作。怎么进行拦截呢？通过代理原型(也叫`借壳`)的方式进行拦截。比如说：
 ```js
-
+var methods = [
+  "push",
+  "pop",
+  "shift",
+  "unshift",
+  "splice",
+  "sort",
+  "reverse"
+]
+var arr = [];
+var proxyProto = Object.create(Array.prototype); //创建一个对象 并且将这个对象的原型指向arr的原型
+// 让这个proxyProto当做一个中间层 进行拦截 他是这样做的，当你调用push方法的时候，他会先去proxyProto里面去找到这个方法，然后执行这个方法，并且在这个方法里面包含了Array.prototype上的push方法，通过上下文指定this让他执行
+methods.forEach(function(method){
+  proxyProto[method] = function(){
+    Array.prototype[method].apply(this,)
+  }
+})
+arr.push(1);
 ```
