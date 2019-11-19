@@ -98,7 +98,9 @@ var proxyProto = Object.create(Array.prototype); //创建一个对象 并且将�
 // 让这个proxyProto当做一个中间层 进行拦截 他是这样做的，当你调用push方法的时候，他会先去proxyProto里面去找到这个方法，然后执行这个方法，并且在这个方法里面包含了Array.prototype上的push方法，通过上下文指定this让他执行
 methods.forEach(function(method){
   proxyProto[method] = function(){
-    Array.prototype[method].apply(this,)
+    // 这里的this指的是arr这个实例  因为arr.__ptoto__指向的是proxyProto，当实例调用方法的时候，谁调用，this就指向谁
+    // arguments是我们通过方法传进来的`1`
+    Array.prototype[method].apply(this, arguments);
   }
 })
 arr.push(1);
