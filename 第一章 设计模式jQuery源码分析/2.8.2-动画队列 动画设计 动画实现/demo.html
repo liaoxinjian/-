@@ -10,14 +10,16 @@
   <div class="box"></div>
   <script src="./jquery.1.0.2.js"></script>
   <script>
-    function fuc(){
+    function fuc(next, hook){
       console.log('111');
+      next();
     }
     function wait(){
       console.log('222');
     }
-    console.log($.queue($('.box'), 'fist', fuc));
-    $.queue($('.box'), 'fist', wait);
+    $.queue($('.box'), 'first', fuc);
+    $.queue($('.box'), 'first', wait);
+    $.dequeue($('.box'), 'first');
   </script>
 </body>
 </html>

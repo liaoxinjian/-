@@ -156,6 +156,14 @@
       // 传过来的时候 直接返回这个value
       // 如果传过来 那么这个value必定是一个数组[function(){}]
       return value !== undefined ? value : key;
+    },
+    remove: function(elem, key){
+      var unlock = this.key(elem);
+      var cache = this.cache[unlock];
+      var i = key.length;
+      while(i--) {
+        delete cache[key[i]];
+      }
     }
   }
   // 创建一个内部私有的数据
