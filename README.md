@@ -14,3 +14,6 @@
 11. [2.8.1动画队列](https://github.com/liaoxinjian/-/tree/master/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8FjQuery%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/2.8.2-%E5%8A%A8%E7%94%BB%E9%98%9F%E5%88%97%20%E5%8A%A8%E7%94%BB%E8%AE%BE%E8%AE%A1%20%E5%8A%A8%E7%94%BB%E5%AE%9E%E7%8E%B0)
 
 *** 个人这一章的学习方法：先看第一遍，蒙蔽状态，然后跟着敲，能敲多少是多少，在看第二遍，再跟着敲，只能敲到几乎每一行代码都包含的意思才算结束 ***
+
+## 第二章函数式编程 Underscore源码分析
+1. [3.1.1函数式编程思想](https://github.com/liaoxinjian/-/tree/master/%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%20Underscore%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/3.1.1%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E6%A6%82%E8%BF%B0)
