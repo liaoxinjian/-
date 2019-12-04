@@ -1,4 +1,12 @@
-(function(root){
+# 3.1.2 underscore整体结构&面向思想
+
+## 整体结构概述
+1. underscore将所有的方法先全部当作静态方法挂载到underscore身上，但是它里面会有一个`_.mixin`方法，这个方法他会将underscore身上的所有静态方法全部都挂载到他的原型身上，并且通过`_.chain`方法来开启链接式调用.
+2. 为了让数据能够向管道一样流通，我们做了一个步骤，这个步骤就是将这个导出去的函数的引用变成一个构造函数
+
+## 实现
+```js
+  (function(root){
   var push = Array.prototype.push;
   var _ = function(obj) {
     // 当我们通过_([1, 2, 3, 4, 5])的时候 这个obj指的就是[1, 2, 3, 4, 5]
@@ -102,3 +110,5 @@
   _.mixin(_);
   root._ = _;
 })(this)
+
+```

@@ -9,7 +9,14 @@
 <body>
   <script src="./underscore.js"></script>
   <script>
-    console.log(_([1,2,3,4,5]));
+    // console.log(_.unique([1, 2, 3, 5, 4, 5, "a", "A"], function(value){
+    //   return typeof value === "string" ? value.toLocaleLowerCase(): value;
+    // }))
+    // console.log(_([1,2,3,4,5]));
+    // console.log(_([1, 2, 3, 5, 4, 5, "a", "A"]).unique(function(value){
+    //   return typeof value === "string" ? value.toLocaleLowerCase(): value;
+    // }));
+    console.log(_([1, 2, 3, 5, 4, 5, "a", "A"]).chain().unique().value())
   </script>
 </body>
 </html>
